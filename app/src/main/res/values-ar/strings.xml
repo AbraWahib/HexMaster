@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">هيكس ماستر</string>
+    <string name="main_screen_label">خمن الكود ... سيطر على اللون</string>
+    <string name="easy">سهل</string>
+    <string name="medium">متوسط</string>
+    <string name="hard">صعب</string>
+    <string name="easy_description">كل رقم بيديك تلميح</string>
+    <string name="medium_description">نسبة دقة توضح مدى قربك من اللون</string>
+    <string name="hard_description">سابق الوقت واضرب اللون</string>
+    <string name="how_to_play">كيفية اللعب</string>
+</resources>

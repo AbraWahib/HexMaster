@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">HexMaster</string>
+    <string name="main_screen_label">Guess the code … master the color.</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="easy_description">Each digit gives you a hint.</string>
+    <string name="medium_description">Accuracy shown as a percentage.</string>
+    <string name="hard_description">Beat the clock. Hit the color.</string>
+    <string name="how_to_play">How to Play</string>
 </resources>
