@@ -2,6 +2,7 @@ package com.abra.HexMaster.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+
 val EasyLevelBackGround = Color(0xff1c3439)
 val EasyLevelTint = Color(0xFF34D399)
 val MediumLevelBackGround = Color(0xFF33312D)
