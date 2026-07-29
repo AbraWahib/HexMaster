@@ -24,7 +24,7 @@ fun ColorSwatch(
             .fillMaxWidth(.9f)
             .aspectRatio(1f)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF, color.r, color.g, color.b))
+            .background(Color(color.r, color.g, color.b, 255))
             .border(2.dp, Color.White, RoundedCornerShape(16.dp))
             .padding(4.dp)
             .border(2.dp, Color.Black.copy(alpha = 0.2f), RoundedCornerShape(12.dp))

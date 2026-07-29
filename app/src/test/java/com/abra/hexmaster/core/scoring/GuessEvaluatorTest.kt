@@ -58,4 +58,12 @@ class GuessEvaluatorTest {
         assertTrue(GuessEvaluator.isPass(Difficulty.MEDIUM, "FFFFFF", answer))
         assertFalse(GuessEvaluator.isPass(Difficulty.MEDIUM, "000000", answer))
     }
+
+    @Test
+    fun testIsPerfectMatch() {
+        val answer = HexColor(255, 255, 255) // FFFFFF
+        assertTrue(GuessEvaluator.isPerfectMatch("FFFFFF", answer))
+        assertTrue(GuessEvaluator.isPerfectMatch("#FFFFFF", answer))
+        assertFalse(GuessEvaluator.isPerfectMatch("FFFFFE", answer))
+    }
 }

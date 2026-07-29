@@ -1,5 +1,6 @@
 package com.abra.hexmaster.ui.screens.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -8,12 +9,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.abra.hexmaster.data.model.Difficulty
 import com.abra.hexmaster.ui.components.ArcadeButton
+import com.abra.hexmaster.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +30,13 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("HEXMASTER", fontWeight = FontWeight.Black, letterSpacing = 2.sp) },
+                title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.hexmaster),
+                        contentDescription = null,
+                        modifier = Modifier.height(TopAppBarDefaults.TopAppBarExpandedHeight).width(160.dp)
+                    )
+                },
                 actions = {
                     IconButton(onClick = { showHowToPlay = true }) {
                         Icon(Icons.Default.Info, contentDescription = "How to Play")
@@ -55,7 +62,7 @@ fun HomeScreen(
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 32.dp)
                 )
-                
+
                 HighScoreCard(
                     overall = highScores["overall"] ?: 0,
                     bestStreak = bestStreak,
@@ -128,25 +135,33 @@ fun HighScoreCard(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
                     Text("OVERALL", style = MaterialTheme.typography.labelSmall)
-                    Text(overall.toString(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Text(
+                        overall.toString(),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text("STREAK", style = MaterialTheme.typography.labelSmall)
-                    Text(bestStreak.toString(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Text(
+                        bestStreak.toString(),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(16.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             HighScoreRow("EASY", easy)
             HighScoreRow("MEDIUM", medium)
             HighScoreRow("HARD", hard)
@@ -157,10 +172,16 @@ fun HighScoreCard(
 @Composable
 fun HighScoreRow(label: String, score: Int) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(label, style = MaterialTheme.typography.bodyMedium)
-        Text(score.toString(), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
+        Text(
+            score.toString(),
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold
+        )
     }
 }

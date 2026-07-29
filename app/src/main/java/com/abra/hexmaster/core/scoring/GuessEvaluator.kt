@@ -26,9 +26,9 @@ object GuessEvaluator {
                 else -> FeedbackColor.RED
             }
 
-            val arrow = when {
-                diff == 0 -> ArrowIndicator.NONE
-                diff in 1..2 -> if (guessDigit < answerDigit) ArrowIndicator.UP else ArrowIndicator.DOWN
+            val arrow = when (diff) {
+                0 -> ArrowIndicator.NONE
+                in 1..2 -> if (guessDigit < answerDigit) ArrowIndicator.UP else ArrowIndicator.DOWN
                 else -> if (guessDigit < answerDigit) ArrowIndicator.UP_UP else ArrowIndicator.DOWN_DOWN
             }
 
@@ -56,5 +56,9 @@ object GuessEvaluator {
                 calculateSimilarity(guessColor, answerColor) >= GameBalanceConfig.PASS_THRESHOLD_MEDIUM_HARD
             }
         }
+    }
+
+    fun isPerfectMatch(guessHex: String, answerColor: HexColor): Boolean {
+        return guessHex.removePrefix("#").uppercase() == answerColor.hex.uppercase()
     }
 }

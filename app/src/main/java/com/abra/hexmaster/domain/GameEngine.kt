@@ -36,7 +36,7 @@ class GameEngine(
         val normalizedGuess = guessHex.removePrefix("#").uppercase()
         val targetColor = _state.value.targetColor
         
-        val isPass = GuessEvaluator.isPass(_state.value.difficulty, normalizedGuess, targetColor)
+        val isCorrect = GuessEvaluator.isPerfectMatch(normalizedGuess, targetColor)
         val similarity = if (_state.value.difficulty == Difficulty.EASY) {
             val guessRgb = HexColorUtils.hexToRgb(normalizedGuess)
             GuessEvaluator.calculateSimilarity(HexColor(guessRgb.first, guessRgb.second, guessRgb.third), targetColor)
@@ -52,11 +52,11 @@ class GameEngine(
         _state.update { currentState ->
             val newTriesUsed = currentState.triesUsed + 1
             
-            // Round ends if guess is correct OR tries are exhausted
-            val roundEnds = isPass || newTriesUsed >= GameBalanceConfig.MAX_TRIES_PER_ROUND
+            // Round ends if guess is perfectly correct OR all tries are used
+            val roundEnds = isCorrect || newTriesUsed >= GameBalanceConfig.MAX_TRIES_PER_ROUND
             
             if (roundEnds) {
-                val roundScore = if (isPass) {
+                val roundScore = if (isCorrect) {
                     ScoreCalculator.calculateRoundScore(
                         currentState.difficulty,
                         similarity,
@@ -67,14 +67,15 @@ class GameEngine(
                 val result = RoundResult(
                     guessHex = normalizedGuess,
                     answerColor = targetColor,
-                    isPass = isPass,
+                    isPass = isCorrect,
                     similarity = similarity,
                     score = roundScore,
                     feedback = feedback
                 )
 
-                val newLives = if (isPass) currentState.lives else currentState.lives - 1
-                val newStreak = if (isPass) currentState.currentStreak + 1 else 0
+                // Lose life ONLY if it was not correct by the end of 6 tries
+                val newLives = if (isCorrect) currentState.lives else currentState.lives - 1
+                val newStreak = if (isCorrect) currentState.currentStreak + 1 else 0
                 val isGameOver = newLives <= 0
 
                 currentState.copy(
@@ -88,7 +89,8 @@ class GameEngine(
                     previousGuesses = currentState.previousGuesses + result
                 )
             } else {
-                // Wrong guess, but tries remaining
+                // Not perfect, but tries remaining. 
+                // We store this as a result but isPass is false because it's not the final result of the round.
                 val result = RoundResult(
                     guessHex = normalizedGuess,
                     answerColor = targetColor,
