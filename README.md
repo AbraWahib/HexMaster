@@ -1,44 +1,98 @@
-# Hex Color Guessing Game 🎨
+<p align="center">
+  <img src="docs/images/app_icon.png" alt="HexMaster app icon" width="774"/>
+</p>
 
-A color-guessing game that challenges players to identify the hexadecimal code of a displayed color, with selectable difficulty levels.
+<h1 align="center">HexMaster</h1>
 
-## 🎚️ Difficulty Selection
+<p align="center">
+  An arcade-style color-guessing game for Android — see a color, guess its hex code.
+</p>
 
-Before starting the game, the player can choose a difficulty level.
+---
 
-Difficulty affects:
-- Allowed error margin
-- Precision required to succeed
-- Feedback strictness
+## Overview
 
-Example:
-- Easy: Large tolerance, forgiving feedback
-- Medium: Moderate accuracy required
-- Hard: Very strict color matching
+A random color is shown on screen. You type your best guess at its 6-digit
+hex code. How much feedback you get — and how much pressure you're under —
+depends on the difficulty:
 
-## 🎯 How the Game Works
+| Difficulty | Feedback                                                             | Timer                     |
+|------------|----------------------------------------------------------------------|---------------------------|
+| **Easy**   | Per-digit color + directional arrows showing how close each digit is | None                      |
+| **Medium** | Overall similarity percentage                                        | None                      |
+| **Hard**   | Same as Medium                                                       | Fixed per-round countdown |
 
-1. The player selects a difficulty level.
-2. A random color is displayed.
-3. The player enters a hex color guess (e.g. `#FF5733`).
-4. The game compares the guess with the correct color.
-5. Feedback is shown based on the selected difficulty.
+The game is endless with 3 lives — miss too many rounds and it's game over.
+Score is based on accuracy (and speed, in Hard mode), with both an overall
+high score and a per-difficulty breakdown saved locally.
 
-## 🧠 Feedback System
+## App Icon
 
-The game compares RGB values of the guessed color and the target color.  
-The calculated distance determines how close the guess is and whether it passes the selected difficulty requirements.
+<p align="center">
+  <img src="docs/images/app_icon.png" alt="HexMaster app icon" width="774"/>
+</p>
 
-## ✨ Features
 
-- User-selectable difficulty levels
-- Real-time accuracy feedback
-- Hex color validation
-- Simple and clean UI
-- Educational gameplay
+## Screenshots
 
-## 🛠️ Technologies Used
+| Home             | Game (Easy)      | Game (medium)    | Game (Hard)      | Game Over        |
+|------------------|------------------|------------------|------------------|------------------|
+| _add screenshot_ | _add screenshot_ | _add screenshot_ | _add screenshot_ | _add screenshot_ |
 
-- Language: _( Kotlin )_
-- UI: _( Jetpack Compose )_
-- RGB distance-based color comparison
+## Features
+
+- Three difficulty modes with distinct feedback systems
+- Per-digit hex grading with color + arrow indicators (colorblind-safe —
+  never relies on color alone)
+- Timed Hard mode with a speed-based scoring bonus
+- Endless play with a 3-life system and streak tracking
+- Local high scores — overall best plus a per-difficulty breakdown
+- Sound & vibration toggles
+
+## Tech Stack
+
+- **Kotlin** + **Jetpack Compose** (Material 3)
+- **MVVM** architecture (`ViewModel` + `StateFlow`)
+- **Compose Navigation**
+- **Jetpack DataStore** (Preferences) for high scores & settings
+- Manual DI via a lightweight `AppContainer`
+- **minSdk 24** (Android 7.0+)
+
+Full architecture, file structure, and game-logic formulas are documented in
+[`HexMaster_Architecture_Plan.md`](HexMaster_Architecture_Plan.md).
+
+## Project Structure
+
+```
+app/src/main/java/com/abra/hexmaster/
+ ├─ core/        → pure game logic: color generation, hex utils, scoring, grading
+ ├─ data/        → models, DataStore-backed settings/high scores
+ ├─ domain/      → GameEngine — round loop, lives, streak, score
+ └─ ui/          → screens, components, theme, navigation
+```
+
+See [`HexMaster_Architecture_Plan.md`](HexMaster_Architecture_Plan.md) for the
+full tree and rationale.
+
+## Getting Started
+
+1. Clone the repo and open it in Android Studio (Iguana or newer recommended).
+2. Let Gradle sync — dependency versions are pinned in
+   `gradle/libs.versions.toml`.
+3. Run on an emulator or device with **API 24+**.
+
+```bash
+./gradlew assembleDebug     # build a debug APK
+./gradlew test              # run unit tests (core game-logic + ViewModels)
+```
+
+## Contributing / Working on this project
+
+If you're an AI coding agent (or a human) picking this project up,
+**read [`AGENTS.md`](AGENTS.md) first** — it documents the binding
+architectural rules, input-handling behavior, accessibility requirements, and
+persistence keys that any change should respect.
+
+## License
+
+_Add a license of your choice (e.g. MIT) here._

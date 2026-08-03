@@ -57,7 +57,7 @@ fun HexMasterNavGraph(
             
             val gameEngine = appContainer.createGameEngine(difficulty)
             val viewModel: GameViewModel = viewModel(
-                factory = GameViewModel.Factory(gameEngine, appContainer.soundManager),
+                factory = GameViewModel.Factory(gameEngine, appContainer.soundManager, appContainer.settingsDataStore),
                 key = difficultyName // Key by difficulty to get fresh VM if switching
             )
             

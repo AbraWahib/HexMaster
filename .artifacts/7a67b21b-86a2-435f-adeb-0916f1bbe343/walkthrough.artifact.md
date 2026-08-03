@@ -1,29 +1,31 @@
-# Walkthrough - Guess History & Feedback Fix
+# Walkthrough - Critical Logic & Color Fixes
 
-I've implemented the scrollable guess history and fixed the "Easy" mode feedback logic to be more consistent with the color thresholds.
+I have fixed the critical bugs regarding color rendering and game-winning logic.
 
 ## Changes Made
 
-### 🔢 Feedback Logic Fix (Easy Mode)
-- **`GuessEvaluator.kt`**: Updated the arrow logic so that double arrows only appear when the color is RED (difference > 2).
-    - `0` difference: GREEN, No arrow.
-    - `1-2` difference: YELLOW, Single arrow (↑/↓).
-    - `3+` difference: RED, Double arrow (↑↑/↓↓).
+### 🎨 Color Correction
+- **`ColorSwatch.kt`**: Fixed a bug where the target color was being rendered incorrectly.
+    - **Previous code**: `Color(0xFF, r, g, b)` (This interpreted 0xFF as Red, R as Green, G as Blue, and B as Alpha).
+    - **Fixed code**: `Color(r, g, b, 255)` (Correctly maps RGB channels and sets full opacity).
+    - *Result*: A target color of `000000` now correctly appears as Black instead of transparent red.
 
-### 📜 Scrollable Guess History
-- **`GameUiState.kt`**: Added a `previousGuesses` list to track all attempts in a round.
-- **`GameEngine.kt`**: Modified to accumulate guesses in the history and reset it between rounds.
-- **`GameScreen.kt`**: Integrated a `LazyColumn` to display all previous guesses. The history automatically scrolls to the most recent attempt.
-- **Layout Adjustment**: Resized the `ColorSwatch` to ensure enough space for the scrollable history while keeping the input field accessible.
+### 🎯 Logic Fix (Exact Match)
+- **`GuessEvaluator.kt`**: Added `isPerfectMatch` to check for exact hex equality.
+- **`GameEngine.kt`**:
+    - Updated the round-end condition to require a **Perfect Match**.
+    - Previously, the game would say "CORRECT!" if you were merely "close enough" (within a threshold).
+    - Now, "close enough" guesses show feedback and consume a try, but the round only ends when you find the exact color or run out of tries.
+    - If you reach the 6th try without an exact match, you lose a life.
 
 ## Verification Results
 
 ### Automated Tests
-- **`GuessEvaluatorTest.kt`**: Verified the new color/arrow relationship.
-- **`GameEngineTest.kt`**: Verified that `previousGuesses` correctly tracks and resets history.
-- **Total Tests**: 15/15 Passed.
+- **`GuessEvaluatorTest.kt`**: Added `testIsPerfectMatch` and verified it handles optional `#` and casing.
+- **`GameEngineTest.kt`**: Verified that near-misses allow further attempts and only exact matches end the round with success.
+- **Total Tests**: 16/16 Passed.
 
 ### Manual Verification
-- Verified that in Easy mode, a digit off by 3 correctly shows a RED box with a double arrow.
-- Verified that making multiple guesses populates a list that can be scrolled.
-- Verified that the list is cleared when clicking "NEXT" to start a new round.
+- Verified that `ColorSwatch` displays the accurate color matching the target hex.
+- Verified that "Easy" mode feedback properly guides the user to the exact match.
+- Verified that the game correctly transitions to "OUT OF TRIES!" and decrements lives if the 6th guess is incorrect.

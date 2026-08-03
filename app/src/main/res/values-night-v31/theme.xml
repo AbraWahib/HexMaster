@@ -3,7 +3,7 @@
 
     <style name="Theme.MySplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_icon</item>
-        <item name="windowSplashScreenBackground">@color/primary_dark</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
         <item name="postSplashScreenTheme">@style/Theme.HexMaster</item>
         <item name="android:windowSplashScreenIconBackgroundColor">@color/white</item>
 

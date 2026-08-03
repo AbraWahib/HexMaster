@@ -1,46 +1,42 @@
-# Implementation Plan - Scrollable Guess History & Logic Fix
+# Implementation Plan - Cancel Confirmation & Score Saving
 
-The user wants to see all previous guesses in a scrollable column and fix the "Easy" mode feedback logic to match specific thresholds.
+This plan addresses the requirement to show a confirmation dialog when a user wants to quit an ongoing game and ensures that scores are correctly saved to the DataStore.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Game Termination Behavior**: When a user confirms they want to quit, the app will save their current score and streak, then navigate to the Game Over screen. This treats the "Quit" action as an early game-over.
 
 ## Proposed Changes
 
-### Logic Fix (Easy Mode)
+### Core Logic & Scoring
 
-#### [MODIFY] [GuessEvaluator.kt](file:///home/abrawahib/AndroidStudioProjects/HexMaster/app/src/main/java/com/abra/hexmaster/core/scoring/GuessEvaluator.kt)
-- Update arrow logic for Easy mode:
-    - `diff == 0` -> `NONE`
-    - `diff in 1..2` -> `UP`/`DOWN` (matches YELLOW)
-    - `diff > 2` -> `UP_UP`/`DOWN_DOWN` (matches RED)
+#### [MODIFY] [GameViewModel.kt](file:///home/abrawahib/AndroidStudioProjects/HexMaster/app/src/main/java/com/abra/hexmaster/ui/screens/game/GameViewModel.kt)
+- Inject `SettingsDataStore` into the constructor.
+- Add a private `saveResult()` method that calls `settingsDataStore.saveHighScore` and `saveBestStreak`.
+- Update `submitGuess()` to call `saveResult()` if `uiState.value.isGameOver` becomes true.
+- Add a new event `GameEvent.OnQuitConfirmed` to handle the case where the user confirms quitting via the dialog. This event will call `saveResult()` and then trigger navigation to the Game Over screen.
 
-### Data Model
-
-#### [MODIFY] [GameUiState.kt](file:///home/abrawahib/AndroidStudioProjects/HexMaster/app/src/main/java/com/abra/hexmaster/data/model/GameUiState.kt)
-- Add `previousGuesses: List<RoundResult> = emptyList()` to track all attempts in the current round.
-
-### Domain Logic
-
-#### [MODIFY] [GameEngine.kt](file:///home/abrawahib/AndroidStudioProjects/HexMaster/app/src/main/java/com/abra/hexmaster/domain/GameEngine.kt)
-- Update `submitGuess` to append the new `RoundResult` to the `previousGuesses` list.
-- Update `nextRound` and `reset` to clear the `previousGuesses` list.
-
-### UI Layer
+### UI Screens
 
 #### [MODIFY] [GameScreen.kt](file:///home/abrawahib/AndroidStudioProjects/HexMaster/app/src/main/java/com/abra/hexmaster/ui/screens/game/GameScreen.kt)
-- Replace the single feedback view with a `LazyColumn` that displays `uiState.previousGuesses`.
-- Display each guess as a card or row with its specific feedback (either `DigitFeedbackRow` or `SimilarityMeter`).
-- Ensure the most recent guess is visible or at the bottom.
-- Keep the `ColorSwatch` and `HexOtpInputField` visible as the primary interaction elements.
+- Add a state variable `showQuitDialog` to manage the visibility of the confirmation alert.
+- Use `BackHandler` from `androidx.activity.compose` to intercept the system back button and set `showQuitDialog = true`.
+- Update the `GameTopBar` back button to also set `showQuitDialog = true` instead of calling `onBack` directly.
+- Implement the `QuitConfirmationDialog` with options to "Stay" (dismiss dialog) or "Quit" (trigger `GameEvent.OnQuitConfirmed`).
+
+### Navigation
+
+#### [MODIFY] [HexMasterNavGraph.kt](file:///home/abrawahib/AndroidStudioProjects/HexMaster/app/src/main/java/com/abra/hexmaster/ui/navigation/HexMasterNavGraph.kt)
+- Update `GameViewModel.Factory` to include `appContainer.settingsDataStore`.
 
 ## Verification Plan
 
-### Automated Tests
-- Update `GuessEvaluatorTest.kt` to reflect the new arrow thresholds.
-- Update `GameEngineTest.kt` to verify `previousGuesses` accumulation.
-
 ### Manual Verification
-- Play a round in Easy mode and verify color/arrow combinations:
-    - Exact match -> Green, no arrow.
-    - Off by 1-2 -> Yellow, single arrow.
-    - Off by 3+ -> Red, double arrow.
-- Verify that multiple guesses appear in a scrollable list.
-- Verify that the list clears between rounds.
+1. **Natural Game Over**: Play until 0 lives. Verify that the score and streak are saved (check the Home screen high scores after returning).
+2. **Quit Confirmation**:
+   - Start a game and score some points.
+   - Press the system back button. Verify the dialog appears.
+   - Click "Stay". Verify you return to the game.
+   - Press the top bar back button. Verify the dialog appears.
+   - Click "Quit". Verify you are taken to the Game Over screen and your score is reflected in the high scores on the Home screen.

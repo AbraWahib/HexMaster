@@ -141,4 +141,8 @@ class GameEngine(
                 GameBalanceConfig.HARD_MODE_TIMER_SECONDS else 0
         )
     }
+
+    fun endGame() {
+        _state.update { it.copy(isGameOver = true) }
+    }
 }

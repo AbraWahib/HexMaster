@@ -64,4 +64,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
 }
