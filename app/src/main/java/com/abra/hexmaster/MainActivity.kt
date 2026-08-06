@@ -23,14 +23,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             HexMasterTheme {
                 val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HexMasterNavGraph(
                         navController = navController,
                         appContainer = appContainer,
-                        modifier = Modifier.padding(innerPadding)
                     )
                 }
-            }
+
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.abra.hexmaster.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -23,12 +22,10 @@ import com.abra.hexmaster.ui.screens.settings.SettingsViewModel
 fun HexMasterNavGraph(
     navController: NavHostController,
     appContainer: AppContainer,
-    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
-        modifier = modifier
     ) {
         composable(Screen.Home.route) {
             val viewModel: HomeViewModel = viewModel(

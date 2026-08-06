@@ -5,11 +5,11 @@
 HexMaster is an arcade-style color-guessing game for Android. A random color is
 shown; the player types its hex code. Feedback and scoring vary by difficulty:
 
-| Difficulty | Feedback | Timer | Notes |
-|---|---|---|---|
-| Easy | Per-digit color (green/yellow/red) + directional arrows | None | Most forgiving, most informative |
-| Medium | Overall similarity % | None | No timer, less granular feedback |
-| Hard | Overall similarity % | Fixed per-round countdown | Same grading as Medium, adds pressure |
+| Difficulty | Feedback                                                | Timer                     | Notes                                 |
+|------------|---------------------------------------------------------|---------------------------|---------------------------------------|
+| Easy       | Per-digit color (green/yellow/red) + directional arrows | None                      | Most forgiving, most informative      |
+| Medium     | Overall similarity %                                    | None                      | No timer, less granular feedback      |
+| Hard       | Overall similarity %                                    | Fixed per-round countdown | Same grading as Medium, adds pressure |
 
 **Game loop:** Endless with 3 lives. Each round gives the player **6 tries** to match the color. Success on any try (1-6) scores points and advances to the next round. Failure on the 6th try → lose a life. After an incorrect guess (tries remaining), the input is cleared for the next attempt. 0 lives → Game Over.
 
