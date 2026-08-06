@@ -37,11 +37,11 @@ high score and a per-difficulty breakdown saved locally.
 
 |               |                                                          |
 |---------------|----------------------------------------------------------|
-| Home          | <img src="docs/screenshots/home.png" width="200" />      |
-| Game (Easy)   | <img src="docs/screenshots/easy.png" width="200" />      |
-| Game (medium) | <img src="docs/screenshots/medium.png" width="200" />    |
-| Game (Hard)   | <img src="docs/screenshots/hard.png" width="200" />      |
-| Game Over     | <img src="docs/screenshots/game_over.png" width="200" /> |
+| Home          | <img src="docs/screenshots/home.png" width="540" />      |
+| Game (Easy)   | <img src="docs/screenshots/easy.png" width="540" />      |
+| Game (medium) | <img src="docs/screenshots/medium.png" width="540" />    |
+| Game (Hard)   | <img src="docs/screenshots/hard.png" width="540" />      |
+| Game Over     | <img src="docs/screenshots/game_over.png" width="540" /> |
 
 ## Features
 
